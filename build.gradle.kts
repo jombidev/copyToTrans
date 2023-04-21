@@ -24,8 +24,6 @@ val fatJar = task("fatJar", type = Jar::class) {
     archiveFileName.set("${project.name.toLowerCaseAsciiOnly()}.jar")
     manifest {
         attributes["Implementation-Title"] = "Gradle Jar File Example"
-        attributes["Implementation-Version"] = archiveVersion.get()
-        attributes["Main-Class"] = "dev.jombi.qrscan.MainKt"
     }
     from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
     with(tasks.jar.get() as CopySpec)
