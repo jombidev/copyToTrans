@@ -10,13 +10,13 @@ import dev.jombi.copytotrans.translator.impl.newg.FailedToTranslateException
 import java.awt.Toolkit
 import java.awt.datatransfer.DataFlavor
 import java.awt.datatransfer.StringSelection
+import java.io.BufferedInputStream
 import javax.sound.sampled.AudioSystem
 import javax.sound.sampled.Clip
 import javax.sound.sampled.DataLine
 import javax.sound.sampled.LineEvent
-import kotlin.io.path.Path
-import kotlin.io.path.inputStream
 import kotlin.system.exitProcess
+
 
 fun main() {
     makeDefaultConfig()
@@ -69,7 +69,7 @@ fun main() {
 fun playFinishedSound() {
     if (!shouldPlaySound()) return
     try {
-        val stream = AudioSystem.getAudioInputStream(Path("res/sharexfinish.wav").inputStream())
+        val stream = AudioSystem.getAudioInputStream(BufferedInputStream(ClassLoader.getSystemResourceAsStream("sharexfinish.wav")!!))
         val format = stream.format
         val info = DataLine.Info(Clip::class.java, format)
         val clip = AudioSystem.getLine(info) as Clip
