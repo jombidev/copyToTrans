@@ -1,9 +1,9 @@
 package dev.jombi.copytotrans.translator.impl
 
 import dev.jombi.copytotrans.buildUrlEncoded
-import dev.jombi.copytotrans.getPapagoApiKey
-import dev.jombi.copytotrans.getPapagoApiSecret
-import dev.jombi.copytotrans.mapper
+import dev.jombi.copytotrans.config.getPapagoApiKey
+import dev.jombi.copytotrans.config.getPapagoApiSecret
+import dev.jombi.copytotrans.config.mapper
 import dev.jombi.copytotrans.translator.Translator
 import java.net.HttpURLConnection
 import java.net.URL

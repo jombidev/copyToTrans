@@ -1,7 +1,7 @@
 package dev.jombi.copytotrans.translator.impl.newg
 
 import dev.jombi.copytotrans.buildUrlEncoded
-import dev.jombi.copytotrans.mapper
+import dev.jombi.copytotrans.config.mapper
 import dev.jombi.copytotrans.translator.Translator
 import java.net.HttpURLConnection
 import java.net.URL
@@ -71,6 +71,7 @@ class GoogleRPCTranslate : Translator {
         val dataThing = mapper.readTree(resp)
         val parsed = mapper.readTree(dataThing[0][2].asText())
         val l = arrayListOf<String>()
+        println(dataThing)
         for (node in parsed[1][0][0][5]) {
             if (node.size() < 2) continue
             l.add(node[0].asText())
