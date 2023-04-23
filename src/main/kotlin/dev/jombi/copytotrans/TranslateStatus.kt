@@ -47,10 +47,8 @@ class TranslateStatus : JDialog() {
             try {
                 val screenSize = Toolkit.getDefaultToolkit().screenSize
                 setLocation(screenSize.width / 2 - lab.width, screenSize.height / 2 + 32)
-//                showOverlay()
                 pack()
             } catch (e: AWTException) {
-//                error("Error while showing overlay", e)
                 exitProcess(-1)
             }
         }

@@ -1,4 +1,4 @@
-package dev.jombi.copytotrans.translator.impl
+package dev.jombi.copytotrans.translator.impl.old
 
 import dev.jombi.copytotrans.buildUrlEncoded
 import dev.jombi.copytotrans.config.mapper

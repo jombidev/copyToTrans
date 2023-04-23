@@ -52,7 +52,7 @@ fun main() {
         GlobalScreen.unregisterNativeHook()
         exitProcess(0)
     }
-    val keybindings = arrayOf(google/*, googleOld*/, papago, exitKey)
+    val keybindings = arrayOf(google, papago, exitKey)
     GlobalScreen.registerNativeHook()
     GlobalScreen.addNativeKeyListener(object : NativeKeyListener {
         override fun nativeKeyPressed(e: NativeKeyEvent) {

@@ -2,11 +2,10 @@ package dev.jombi.copytotrans
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import dev.jombi.copytotrans.translator.Translator
-import dev.jombi.copytotrans.translator.impl.GoogleAnonTranslate
-import dev.jombi.copytotrans.translator.impl.PapagoTranslate
 import dev.jombi.copytotrans.translator.impl.newg.GoogleRPCTranslate
-import java.net.HttpURLConnection
-import java.net.URL
+import dev.jombi.copytotrans.translator.impl.newp.PapagoAnonTranslate
+import dev.jombi.copytotrans.translator.impl.old.GoogleAnonTranslate
+import dev.jombi.copytotrans.translator.impl.old.PapagoTokenedTranslate
 import java.net.URLEncoder
 
 interface Translators {
@@ -19,79 +18,13 @@ interface Translators {
     object GoogleOld : Translators {
         override val translator = GoogleAnonTranslate()
     }
+    object PapagoOld : Translators {
+        override val translator = PapagoTokenedTranslate()
+    }
     object Papago : Translators {
-        override val translator = PapagoTranslate()
+        override val translator = PapagoAnonTranslate()
     }
 }
 
 fun ObjectMapper.buildJson(vararg pairs: Pair<String, Any?>): String = writeValueAsString(mapOf(*pairs))
-fun buildUrlEncoded(vararg pairs: Pair<String, Comparable<*>>) = pairs.joinToString("&") { "${URLEncoder.encode(it.first, "utf-8")}=${URLEncoder.encode("${it.second}", "utf-8")}" }
-/*
-export class Translator {
-  protected options: typeof defaults & TranslateOptions;
-
-  constructor(protected inputText: string, options?: TranslateOptions) {
-    this.options = Object.assign({}, defaults, options);
-  }
-
-  async translate() {
-    const url = this.buildUrl();
-    const fetchOptions = this.buildFetchOptions();
-    const res = await fetch(url, fetchOptions);
-    if (!res.ok) throw await this.buildError(res);
-    const raw = await res.json() as RawResponse;
-    const text = this.buildResText(raw);
-    return { text, raw };
-  }
-
-  protected buildUrl() {
-    const { host } = this.options;
-    return [
-      `https://${host}/translate_a/single`,
-      '?client=at',
-      '&dt=t',  // return sentences
-      '&dt=rm', // add translit to sentences
-      '&dj=1',  // result as pretty json instead of deep nested arrays
-    ].join('');
-  }
-
-  protected buildBody() {
-    const { from, to } = this.options;
-    const params = {
-      sl: from,
-      tl: to,
-      q: this.inputText,
-    };
-    return new URLSearchParams(params).toString();
-  }
-
-  protected buildFetchOptions() {
-    const { fetchOptions } = this.options;
-    const res = Object.assign({}, fetchOptions);
-    res.method = 'POST';
-    res.headers = Object.assign({}, res.headers, {
-      'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
-    });
-    res.body = this.buildBody();
-    return res;
-  }
-
-  protected buildResText({ sentences }: RawResponse) {
-    return sentences
-      .filter((s): s is Sentence => 'trans' in s)
-      .map(s => s.trans)
-      .join('');
-  }
-
-  protected async buildError(res: Response) {
-    if (res.status === 429) {
-      const text = await res.text();
-      const { ip, time, url } = extractTooManyRequestsInfo(text);
-      const message = `${res.statusText} IP: ${ip}, Time: ${time}, Url: ${url}`;
-      return createHttpError(res.status, message);
-    } else {
-      return createHttpError(res.status, res.statusText);
-    }
-  }
-}
-*/
+fun buildUrlEncoded(vararg pairs: Pair<String, Comparable<*>>) = pairs.joinToString("&") { "${it.first}=${URLEncoder.encode("${it.second}", "utf-8")}" }

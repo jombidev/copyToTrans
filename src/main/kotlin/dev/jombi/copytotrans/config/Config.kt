@@ -14,15 +14,15 @@ fun makeDefaultConfig() {
     val cfg = getRawConfig()
     val path = Path("config.json")
     val p = Property()
-    if (cfg.hasNonNull("papagoKey")) p.papagoKey = cfg["papagoKey"].asText()
-    if (cfg.hasNonNull("papagoSecret")) p.papagoSecret = cfg["papagoSecret"].asText()
+//    if (cfg.hasNonNull("papagoKey")) p.papagoKey = cfg["papagoKey"].asText()
+//    if (cfg.hasNonNull("papagoSecret")) p.papagoSecret = cfg["papagoSecret"].asText()
     if (cfg.hasNonNull("sound")) p.sound = cfg["sound"].asBoolean()
     if (cfg.hasNonNull("overlay")) p.overlay = cfg["overlay"].asBoolean()
     mapper.writerWithDefaultPrettyPrinter().writeValue(path.outputStream(), p)
 }
 
-fun getPapagoApiKey(): String = getConfig().papagoKey
-fun getPapagoApiSecret(): String = getConfig().papagoSecret
+//fun getPapagoApiKey(): String = getConfig().papagoKey
+//fun getPapagoApiSecret(): String = getConfig().papagoSecret
 
 fun shouldShowOverlay(): Boolean = getConfig().overlay
 fun shouldPlaySound(): Boolean = getConfig().sound

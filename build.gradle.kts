@@ -23,9 +23,6 @@ dependencies {
 val fatJar = task("fatJar", type = Jar::class) {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     archiveFileName.set("${project.name.toLowerCaseAsciiOnly()}.jar")
-    manifest {
-        attributes["Implementation-Title"] = "Gradle Jar File Example"
-    }
     from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
     with(tasks.jar.get() as CopySpec)
 }
