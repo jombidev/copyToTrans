@@ -1,7 +1,6 @@
-package dev.jombi.copytotrans
+package dev.jombi.copytotrans.translator
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import dev.jombi.copytotrans.translator.Translator
 import dev.jombi.copytotrans.translator.impl.newg.GoogleRPCTranslate
 import dev.jombi.copytotrans.translator.impl.newp.PapagoAnonTranslate
 import dev.jombi.copytotrans.translator.impl.old.GoogleAnonTranslate

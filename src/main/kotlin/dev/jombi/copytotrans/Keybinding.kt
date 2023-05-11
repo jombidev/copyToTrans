@@ -1,6 +1,6 @@
 package dev.jombi.copytotrans
 
-class Keybinding(combos: List<Int>, private val action: () -> Unit) {
+class Keybinding(combos: List<Int>, private val exclude: List<Int> = listOf(), private val action: () -> Unit) {
     private val MASK_A = 1 shl 0
     private val MASK_B = 1 shl 1
     private val MASK_C = 1 shl 2
@@ -19,9 +19,10 @@ class Keybinding(combos: List<Int>, private val action: () -> Unit) {
     private val KEY_7 = MASK_A or MASK_B or MASK_C or MASK_D or MASK_E or MASK_F or MASK_G
     private val KEY_8 = MASK_A or MASK_B or MASK_C or MASK_D or MASK_E or MASK_F or MASK_G or MASK_H
 
-    var keyPressDetector = 0x00000000
+    var keyPressDetector = 0
         private set
     private var comboArray = combos.toTypedArray()
+    private val shouldExclude = arrayListOf<Int>()
 
     init {
         if (combos.size !in 1..8) {
@@ -31,55 +32,50 @@ class Keybinding(combos: List<Int>, private val action: () -> Unit) {
     private val comboSize = combos.size
 
     fun press(keyCode: Int) {
-        if (comboArray.indexOf(keyCode) != -1) {
-            when (comboArray.indexOf(keyCode)) {
-                0 -> keyPressDetector = keyPressDetector or MASK_A
-                1 -> keyPressDetector = keyPressDetector or MASK_B
-                2 -> keyPressDetector = keyPressDetector or MASK_C
-                3 -> keyPressDetector = keyPressDetector or MASK_D
-                4 -> keyPressDetector = keyPressDetector or MASK_E
-                5 -> keyPressDetector = keyPressDetector or MASK_F
-                6 -> keyPressDetector = keyPressDetector or MASK_G
-                7 -> keyPressDetector = keyPressDetector or MASK_H
-            }
+        if (keyCode in exclude)
+            shouldExclude.add(keyCode)
+        when (comboArray.indexOf(keyCode)) {
+            0 -> keyPressDetector = keyPressDetector or MASK_A
+            1 -> keyPressDetector = keyPressDetector or MASK_B
+            2 -> keyPressDetector = keyPressDetector or MASK_C
+            3 -> keyPressDetector = keyPressDetector or MASK_D
+            4 -> keyPressDetector = keyPressDetector or MASK_E
+            5 -> keyPressDetector = keyPressDetector or MASK_F
+            6 -> keyPressDetector = keyPressDetector or MASK_G
+            7 -> keyPressDetector = keyPressDetector or MASK_H
         }
+        if (shouldExclude.isNotEmpty()) return
         when (comboSize) {
             1 -> if (keyPressDetector == KEY_1) {
                 action()
-                //println("pressed action")
             }
             2 -> if (keyPressDetector == KEY_2) {
                 action()
-                //println("pressed action")
             }
             3 -> if (keyPressDetector == KEY_3) {
                 action()
-                //println("pressed action")
             }
             4 -> if (keyPressDetector == KEY_4) {
                 action()
-                //println("pressed action")
             }
             5 -> if (keyPressDetector == KEY_5) {
                 action()
-                //println("pressed action")
             }
             6 -> if (keyPressDetector == KEY_6) {
                 action()
-                //println("pressed action")
             }
             7 -> if (keyPressDetector == KEY_7) {
                 action()
-                //println("pressed action")
             }
             8 -> if (keyPressDetector == KEY_8) {
                 action()
-                //println("pressed action")
             }
         }
     }
 
     fun unpress(keyCode: Int) {
+        if (keyCode in shouldExclude)
+            shouldExclude.remove(keyCode)
         if (comboArray.indexOf(keyCode) != -1) {
             when (comboArray.indexOf(keyCode)) {
                 0 -> keyPressDetector = keyPressDetector xor MASK_A

@@ -1,6 +1,5 @@
-package dev.jombi.copytotrans.overlay
+package dev.jombi.copytotrans.overlay.finish
 
-import dev.jombi.copytotrans.TranslateStatus
 import dev.jombi.copytotrans.config.shouldShowOverlay
 
 object OverlayManager {

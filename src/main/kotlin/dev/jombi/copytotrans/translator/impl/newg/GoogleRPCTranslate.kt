@@ -1,8 +1,8 @@
 package dev.jombi.copytotrans.translator.impl.newg
 
-import dev.jombi.copytotrans.buildUrlEncoded
 import dev.jombi.copytotrans.config.mapper
 import dev.jombi.copytotrans.translator.Translator
+import dev.jombi.copytotrans.translator.buildUrlEncoded
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -23,15 +23,13 @@ class GoogleRPCTranslate : Translator {
             "soc-platform" to "1",
             "soc-device" to "1",
             "rt" to "c",
+            "Content-Type" to "application/x-www-form-urlencoded;charset=utf-8"
         )
         val con = URL(TRANSLATE_RPC).openConnection() as HttpURLConnection
         con.doInput = true
         con.doOutput = true
         con.requestMethod = "POST"
-        for ((k, v) in params) {
-            con.addRequestProperty(k, v)
-        }
-        con.addRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=utf-8")
+        for ((k, v) in params) con.addRequestProperty(k, v)
         con.outputStream.use {
             it.write(data.toByteArray())
             it.flush()

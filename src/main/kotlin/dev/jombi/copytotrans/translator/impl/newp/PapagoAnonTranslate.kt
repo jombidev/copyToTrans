@@ -1,8 +1,8 @@
 package dev.jombi.copytotrans.translator.impl.newp
 
-import dev.jombi.copytotrans.buildUrlEncoded
 import dev.jombi.copytotrans.config.mapper
 import dev.jombi.copytotrans.translator.Translator
+import dev.jombi.copytotrans.translator.buildUrlEncoded
 import dev.jombi.copytotrans.translator.impl.newg.FailedToTranslateException
 import java.net.HttpURLConnection
 import java.net.URL
@@ -19,7 +19,7 @@ class PapagoAnonTranslate : Translator {
     }
 
     override fun translate(target: String): String {
-        val offset = System.currentTimeMillis() - 1500L
+        val offset = System.currentTimeMillis()
         val url = "$endpoint/apis/n2mt/translate"
         val uuid = PapagoUUIDGen.gen()
         val hash = createAuthorization(offset, url)
@@ -50,8 +50,7 @@ class PapagoAnonTranslate : Translator {
         if (con.responseCode in 200..299) {
             return mapper.readTree(con.inputStream)["translatedText"].asText()
         } else {
-            println(String(con.errorStream.readBytes()))
-            throw FailedToTranslateException(con.responseCode)
+            throw FailedToTranslateException(con.responseCode, mapper.readTree(con.errorStream)["errorMessage"].asText())
         }
     }
 

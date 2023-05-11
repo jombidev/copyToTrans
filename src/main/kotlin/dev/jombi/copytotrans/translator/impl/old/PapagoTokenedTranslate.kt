@@ -1,6 +1,6 @@
 package dev.jombi.copytotrans.translator.impl.old
 
-import dev.jombi.copytotrans.buildUrlEncoded
+import dev.jombi.copytotrans.translator.buildUrlEncoded
 import dev.jombi.copytotrans.config.mapper
 import dev.jombi.copytotrans.translator.Translator
 import java.net.HttpURLConnection

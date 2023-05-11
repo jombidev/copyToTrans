@@ -1,4 +1,4 @@
-package dev.jombi.copytotrans
+package dev.jombi.copytotrans.overlay.finish
 
 import java.awt.AWTException
 import java.awt.BorderLayout
