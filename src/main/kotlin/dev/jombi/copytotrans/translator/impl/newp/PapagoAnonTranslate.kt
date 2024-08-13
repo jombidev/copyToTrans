@@ -11,16 +11,19 @@ import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 
 class PapagoAnonTranslate : Translator {
-    private val endpoint = "https://papago.naver.com"
-    val userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/114.0"
+    companion object {
+        const val ENDPOINT = "https://papago.naver.com"
+    }
+    private val userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/114.0"
 
     init {
         PapagoUUIDGen.gen()
+        PapagoSecretGen.gen()
     }
 
     override fun translate(target: String): String {
         val offset = System.currentTimeMillis()
-        val url = "$endpoint/apis/n2mt/translate"
+        val url = "$ENDPOINT/apis/n2mt/translate"
         val uuid = PapagoUUIDGen.gen()
         val hash = createAuthorization(offset, url)
         val transHeader = arrayOf(
@@ -57,7 +60,7 @@ class PapagoAnonTranslate : Translator {
     private fun createAuthorization(time: Long, url: String): String {
         val uuid = PapagoUUIDGen.gen()
         val mac = Mac.getInstance("HmacMD5")
-        mac.init(SecretKeySpec("v1.7.3_de60216eaa".toByteArray(charset("utf-8")), "HmacMD5"))
+        mac.init(SecretKeySpec(PapagoSecretGen.gen().toByteArray(charset("utf-8")), "HmacMD5"))
         val myMac = uuid + "\n" + url.split("?")[0] + "\n" + time
         return Base64.getEncoder().encodeToString(mac.doFinal(myMac.toByteArray()))
     }

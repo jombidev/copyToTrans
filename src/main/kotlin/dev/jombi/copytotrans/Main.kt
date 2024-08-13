@@ -26,53 +26,15 @@ fun isMac(): Boolean {
 fun main() {
     makeDefaultConfig()
     trayIcon
-    val clipboard = Toolkit.getDefaultToolkit().systemClipboard
+
     val mod = if (isMac()) NativeKeyEvent.VC_CONTROL else NativeKeyEvent.VC_ALT
     val google = Keybinding(listOf(mod, NativeKeyEvent.VC_SHIFT, NativeKeyEvent.VC_Q)) {
-        try {
-            val target = clipboard.getData(DataFlavor.stringFlavor) as String
-            println("Received: $target")
-            val translated = Translators.Google.translate(target)
-            println("Translated: $translated, using 'Google' translator")
-            val sel = StringSelection(translated)
-            clipboard.setContents(sel, sel)
-            OverlayManager.show(translated)
-            Sounds.SUCCESS.play()
-        } catch (e: Exception) {
-            println("Failed to translate: ${e.message}")
-            val sel = StringSelection(e.message)
-            clipboard.setContents(sel, sel)
-            Sounds.FAILED.play()
-            if (e !is FailedToTranslateException) e.printStackTrace()
-        }
+        translate(Translators.Google)
     }
     val papago = Keybinding(listOf(mod, NativeKeyEvent.VC_SHIFT, NativeKeyEvent.VC_W)) {
-        try {
-            val target = clipboard.getData(DataFlavor.stringFlavor) as String
-            println("Received: $target")
-            val translated = Translators.Papago.translate(target)
-            println("Translated: $translated, using 'Papago' translator")
-            val sel = StringSelection(translated)
-            clipboard.setContents(sel, sel)
-            OverlayManager.show(translated)
-            Sounds.SUCCESS.play()
-        } catch (e: Exception) {
-            println("Failed to translate: ${e.message}")
-            val sel = StringSelection(e.message)
-            clipboard.setContents(sel, sel)
-            Sounds.FAILED.play()
-            if (e !is FailedToTranslateException) e.printStackTrace()
-        }
+        translate(Translators.Papago)
     }
     val deepl = Keybinding(listOf(mod, NativeKeyEvent.VC_SHIFT, NativeKeyEvent.VC_E)) {
-//        val target = clipboard.getData(DataFlavor.stringFlavor) as String
-//        println("Received: $target")
-//        val translated = Translators.DeepL.translate(target)
-//        println("Translated: $translated, using 'Papago' translator")
-//        val sel = StringSelection(translated)
-//        clipboard.setContents(sel, sel)
-//        OverlayManager.show(translated)
-//        playFinishedSound()
     }
     val exitKey = Keybinding(listOf(NativeKeyEvent.VC_CONTROL, NativeKeyEvent.VC_ESCAPE)) {
         GlobalScreen.unregisterNativeHook()
@@ -90,6 +52,26 @@ fun main() {
         }
     })
     OverlayManager.init()
+}
+
+fun translate(translator: Translators) {
+    val clipboard = Toolkit.getDefaultToolkit().systemClipboard
+    try {
+        val target = clipboard.getData(DataFlavor.stringFlavor) as String
+        println("Received: $target")
+        val translated = translator.translate(target)
+        println("Translated: $translated, using '${translator::class.simpleName}' translator")
+        val sel = StringSelection(translated)
+        clipboard.setContents(sel, sel)
+        OverlayManager.show(translated)
+        Sounds.SUCCESS.play()
+    } catch (e: Exception) {
+        println("Failed to translate: ${e.message}")
+        val sel = StringSelection(e.message)
+        clipboard.setContents(sel, sel)
+        Sounds.FAILED.play()
+        if (e !is FailedToTranslateException) e.printStackTrace()
+    }
 }
 
 private var _trayIcon: TrayIcon? = null

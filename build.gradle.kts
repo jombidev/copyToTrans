@@ -1,7 +1,9 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.util.capitalizeDecapitalize.toLowerCaseAsciiOnly
 
 plugins {
-    kotlin("jvm") version "1.8.0"
+    kotlin("jvm") version "2.0.0"
     application
 }
 
@@ -18,6 +20,8 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.14.2")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.2")
+    implementation("org.jsoup:jsoup:1.18.1")
+
 }
 
 val fatJar = task("fatJar", type = Jar::class) {
@@ -38,7 +42,11 @@ tasks.test {
 }
 
 kotlin {
-    jvmToolchain(8)
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_1_8)
+        apiVersion.set(KotlinVersion.KOTLIN_2_0)
+        languageVersion.set(KotlinVersion.KOTLIN_2_0)
+    }
 }
 
 application {
